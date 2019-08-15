@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row mx-auto">
-      <div id="clockdiv" style="margin: auto">
+      <div id="clockdiv" style="margin: auto" v-show="show_count_down">
         <div>
           <span class="minutes"></span>
           <div class="smalltext">Minutes</div>
@@ -91,7 +91,11 @@
       'show_count_down': function() {
         if(this.start_time) {
           let t = Date.parse(this.start_time) - Date.parse(new Date());
-          return t <= 0
+          let t1 = Date.parse(this.end_time) - Date.parse(new Date());
+          return t <= 0 && t1 >= 0
+        }
+        if(this.end_time) {
+
         }
         return false
       }
@@ -112,31 +116,41 @@
 
       'show_count_down': function() {
         if(this.show_count_down) {
-
+          this.$store.state.finished_order = false
+        }
+        else {
+          this.$store.state.finished_order = true
+        }
+      },
+      'end_time': function() {
+        if (this.end_time) {
+          this.createClock()
         }
       }
     },
 
     mounted() {
-      function getTimeRemaining(endtime) {
+    },
+
+    methods: {
+      getTimeRemaining(endtime) {
         var t = Date.parse(endtime) - Date.parse(new Date());
         var seconds = Math.floor((t / 1000) % 60);
-        var minutes = Math.floor((t / (1000 * 60)) % 24);
+        var minutes = Math.floor((t / (1000 * 60)));
         return {
           'total': t,
           'minutes': minutes,
           'seconds': seconds
         };
-      }
+      },
 
-       let initializeClock = (id, endtime) => {
+      initializeClock(id, endtime) {
         var clock = document.getElementById(id);
         var minutesSpan = clock.querySelector('.minutes');
         var secondsSpan = clock.querySelector('.seconds');
 
         let updateClock = () => {
-          var t = getTimeRemaining(endtime);
-
+          var t = this.getTimeRemaining(endtime);
           minutesSpan.innerHTML = (t.minutes);
           secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
           if (t.total <= 0) {
@@ -149,16 +163,12 @@
 
         updateClock();
         var timeinterval = setInterval(updateClock, 1000);
-      }
+      },
 
-      $(document).ready(function(){
-        var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
-        initializeClock('clockdiv', deadline);
-
-      });
-    },
-
-    methods: {
+      createClock() {
+        var deadline = new Date(Date.parse(this.end_time))
+        this.initializeClock('clockdiv', deadline);
+      },
       submitOrder() {
         let url = process.env.api_host + '/submit-order'
         let payload = {

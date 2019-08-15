@@ -65,8 +65,7 @@ ActiveRecord::Schema.define(version: 2019_08_06_031413) do
 
   create_table "foods", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
-    t.string "type"
-    t.integer "default_price", default: 0
+    t.integer "default_price"
     t.integer "restaurant_id"
     t.boolean "status", default: true
     t.float "average_star", default: 5.0

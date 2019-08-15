@@ -22,9 +22,10 @@ module Api
         foods.each do |f|
           food_images << f.food_images
         end
+        f = foods.map(&:attributes)
         favourite_list = current_user.user_favorite_foods
         render json: {
-          foods: foods,
+          foods: f,
           daily: daily,
           res_name: restaurant.name,
           res_id: restaurant.id,

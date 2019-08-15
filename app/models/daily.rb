@@ -7,7 +7,7 @@ class Daily < ApplicationRecord
 
   class << self
     def today
-      Daily.find_by date: DateTime.now.to_date
+      Daily.last
     end
   end
 end
