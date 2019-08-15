@@ -3,9 +3,12 @@
     <div id="particles" class="gtco-section">
       <div class="gtco-container">
         <div class="row">
-          <div class="col-md-10 text-center gtco-heading">
+          <div class="col-md-10 text-center gtco-heading" v-show="!empty_res">
             <h2 class="cursive-font">{{restaurant_name}} Restaurant</h2>
             <p>Today Discount <span class="text-success">{{$store.state.today_discount}}%</span></p>
+          </div>
+          <div v-show="empty_res">
+            <h2 class="cursive-font text-danger">No Restaurant Selected</h2>
           </div>
           <div class="col-md-2">
             <button type="button" class="btn btn-5" v-if="dark_mode" @click="offDarkMode">DarkMode: ON</button>
@@ -116,6 +119,7 @@
         background: background,
         current_order: {},
         favourite_list: [],
+        empty_res: false,
       }
     },
     components: {
@@ -157,6 +161,9 @@
         this.$emit('toggleLoading')
         get(url)
           .then((res) => {
+          if(res.data.restaurant === null) {
+            this.empty_res = true
+          }
           this.foods = res.data.foods
           this.food_images = res.data.food_images
           this.restaurant_name = res.data.res_name
@@ -165,9 +172,9 @@
           this.favourite_list = res.data.favourite_list ? res.data.favourite_list : []
           this.$store.state.daily = res.data.daily
           this.mergeFoodAndImages()
-          this.$emit('toggleLoading')
         })
           .finally(() => {
+            this.$emit('toggleLoading')
           })
       },
 
