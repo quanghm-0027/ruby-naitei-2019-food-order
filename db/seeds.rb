@@ -1,5 +1,5 @@
-Admin.create! username: "admin",
-              password: "admin"
+# Admin.create! username: "admin",
+#               password: "admin"
 
 50.times do |n|
   user = User.new

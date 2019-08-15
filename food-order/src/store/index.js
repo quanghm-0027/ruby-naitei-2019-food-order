@@ -18,6 +18,7 @@ const store = new Vuex.Store({
         today_discount: 0,
         favourite_list: [],
         finished_order: false,
+        daily: {}
     },
 
     getters: {},

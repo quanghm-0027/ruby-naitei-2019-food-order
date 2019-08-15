@@ -115,7 +115,7 @@
         background_image: current_bg,
         background: background,
         current_order: {},
-        favourite_list: []
+        favourite_list: [],
       }
     },
     components: {
@@ -163,6 +163,7 @@
           this.restaurant_id = res.data.res_id
           this.$store.state.today_discount = res.data.discount ? res.data.discount : 0
           this.favourite_list = res.data.favourite_list ? res.data.favourite_list : []
+          this.$store.state.daily = res.data.daily
           this.mergeFoodAndImages()
           this.$emit('toggleLoading')
         })

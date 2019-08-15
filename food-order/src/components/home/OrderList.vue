@@ -73,6 +73,9 @@
         orderList: this.$store.state.orderList,
         current_order: current_order.length ? current_order[0] : {orderList: []},
         show_order_detail: false,
+        start_time: '',
+        end_time: '',
+        is_show_count_down: false,
       }
     },
 
@@ -84,12 +87,33 @@
         })
         return total
       },
+
+      'show_count_down': function() {
+        if(this.start_time) {
+          let t = Date.parse(this.start_time) - Date.parse(new Date());
+          return t <= 0
+        }
+        return false
+      }
     },
 
     watch: {
       'orderList': function () {
         let current_order = this.$store.state.orderList.filter(o => o.user_id === this.$store.state.auth.user.id)
         this.current_order = current_order.length ? current_order[0] : {orderList: []}
+      },
+
+      '$store.state.daily': function() {
+        if(this.$store.state.daily) {
+          this.start_time = this.$store.state.daily.start_time_order
+          this.end_time = this.$store.state.daily.end_time_order
+        }
+      },
+
+      'show_count_down': function() {
+        if(this.show_count_down) {
+
+        }
       }
     },
 
@@ -115,7 +139,6 @@
 
           minutesSpan.innerHTML = (t.minutes);
           secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
-          console.log(t)
           if (t.total <= 0) {
             this.$store.state.finished_order = true
             this.clearAllOrdered()
@@ -129,7 +152,7 @@
       }
 
       $(document).ready(function(){
-        var deadline = new Date(Date.parse(new Date()) + 0.1 * 60 * 1000);
+        var deadline = new Date(Date.parse(new Date()) + 10 * 60 * 1000);
         initializeClock('clockdiv', deadline);
 
       });

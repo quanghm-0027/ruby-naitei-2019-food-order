@@ -25,6 +25,7 @@ module Api
         favourite_list = current_user.user_favorite_foods
         render json: {
           foods: foods,
+          daily: daily,
           res_name: restaurant.name,
           res_id: restaurant.id,
           food_images: food_images,

@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :admins
+  # devise_for :admins
   scope "(:locale)", locale: /en/ do
     root "users#index"
     get "admins/dashboard"
